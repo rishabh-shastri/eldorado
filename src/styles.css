@@ -1,0 +1,15 @@
+.inputsize{
+    width: 50%;
+}
+.bgimg{
+    background-image: url("");
+}
+.formCenter{
+    padding-left: 30%;
+    padding-top: 3%;
+    padding-bottom: 5%;
+}
+.searchwidth {
+    max-width: 100%;
+    width: 100%;
+}
