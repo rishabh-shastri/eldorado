@@ -1,17 +1,19 @@
 package com.sapient.eldorado.entities;
 
+import java.io.Serializable;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "product_details")
-public class Product {
+public class Product implements Serializable{
 	@Id
 	private String id;
 	private String name;
 	private String desc;
 	private String category;
-	private int price;
-	private int quantity;
+	private String price;
+	private String quantity;
 	private String imageLinks;
 	private String videoLinks;
 	private String pdfLink;
@@ -19,7 +21,7 @@ public class Product {
 	public Product() {
 	}
 	
-	public Product(String name, String desc, String category, int price, int quantity, String imageLinks,
+	public Product(String name, String desc, String category, String price, String quantity, String imageLinks,
 			String videoLinks, String pdfLink) {
 		super();
 		this.name = name;
@@ -49,16 +51,16 @@ public class Product {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public int getPrice() {
+	public String getPrice() {
 		return price;
 	}
-	public void setPrice(int price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
-	public int getQuantity() {
+	public String getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(String quantity) {
 		this.quantity = quantity;
 	}
 	public String getImageLinks() {
@@ -76,8 +78,8 @@ public class Product {
 	public String getPdfLink() {
 		return pdfLink;
 	}
-	public void setPdfLinks(String pdfLinks) {
-		this.pdfLink = pdfLinks;
+	public void setPdfLink(String pdfLink) {
+		this.pdfLink = pdfLink;
 	}
 	@Override
 	public String toString() {

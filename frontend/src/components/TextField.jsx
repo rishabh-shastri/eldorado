@@ -4,9 +4,9 @@ import {Form} from 'react-bootstrap';
 function TextField(props) {
     return (
         <div>
-            <Form.Group className="mb-3" controlId={props.controlId}>
+            <Form.Group className="mb-3">
                 <Form.Label>{props.name}</Form.Label>
-                <Form.Control className="inputsize" type="text" placeholder={props.placeholder} />
+                <Form.Control id={props.id} className="inputsize" type="text" placeholder={props.placeholder} onChange={e=>{props.input(e,e.target.value)}}/>
                 <Form.Text className="text-muted">
                 </Form.Text>
             </Form.Group>

@@ -7,11 +7,11 @@ import FormCustom from './FormCustom';
 
 
 function App(props) {
+    
     return (
         <div>
         <NavBarCustom/>
         <FormCustom/>
-            
         </div>
     );
 }

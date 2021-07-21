@@ -1,4 +1,5 @@
 import React from 'react';
+import {BsSearch} from 'react-icons/bs';
 import {Navbar,Form,Container,FormControl,Nav,Button} from 'react-bootstrap';
 
 function NavBarCustom(props) {
@@ -15,12 +16,13 @@ function NavBarCustom(props) {
                         placeholder="Search"
                         className="mr-2 searchwidth"
                         aria-label="Search"
-                        
                     />
-                    <Button variant="outline-light">Search</Button>
+                    <Button variant="outline-light">
+                    <BsSearch/>
+                    </Button>
                     </Form>
                     <Navbar.Toggle/>
-                <Nav className="ml-auto justify-content-end" style={{ width: "100%" }}>
+                <Nav className="justify-content-end" style={{ width: "100%" }} >
                     <Nav.Link href="myprofile" >My Profile</Nav.Link>
                     <Nav.Link href="logout">Logout</Nav.Link>
                 </Nav>
