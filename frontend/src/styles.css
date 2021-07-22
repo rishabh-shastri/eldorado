@@ -11,3 +11,8 @@
     width: 50rem;
     margin-right: 1rem;
 }
+
+.form-group.required .control-label:after {
+    content:"*";
+    color:red;
+  }

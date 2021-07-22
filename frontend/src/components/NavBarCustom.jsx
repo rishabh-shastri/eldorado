@@ -5,7 +5,7 @@ import {Navbar,Form,Container,FormControl,Nav,Button} from 'react-bootstrap';
 function NavBarCustom(props) {
     return (
         <div>
-            <Navbar className="navbar-dark" bg="primary" expand="lg">
+            <Navbar className="navbar-dark" bg="dark" expand="lg">
             <Container>
                 <Navbar.Brand href="home">El Dorado</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
