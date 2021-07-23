@@ -1,8 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './../styles.css';
-import NavBarCustom from './NavBarCustom';
-import FormCustom from './FormCustom';
+import AddProductPage from './AddProductPage';
 
 
 
@@ -10,8 +9,7 @@ function App(props) {
     
     return (
         <div>
-        <NavBarCustom/>
-        <FormCustom/>
+        <AddProductPage/>
         </div>
     );
 }
