@@ -30,7 +30,6 @@ public class ProductController {
 
 	@PostMapping("/admin/product")
 	public void addProduct(@RequestBody Product product) {
-		System.out.println(product);
 		try {
 			productService.addProductService(product);
 			if (product != null)

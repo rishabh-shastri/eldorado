@@ -22,7 +22,7 @@ public class ProductServiceImpl implements ProductService {
 	public void addProductService(Product product) throws EmptyFieldException, InvalidEntryException {
 		validateProductDetails(product); // Validating Product Details Received
 
-		System.out.println(product);
+		//System.out.println(product);
 		productRepository
 				.save(new Product(product.getName(), product.getDesc(), product.getCategory(), product.getPrice(),
 						product.getQuantity(), product.getImageLinksList(), product.getVideoLinksList(), product.getPdfLink()));
@@ -42,14 +42,14 @@ public class ProductServiceImpl implements ProductService {
 		validateDesc(desc);
 		validateCategory(category);
 		validateQuantity(quantity);
-		for(String link:imageLinksList) {
-			System.out.println(link);
-			validateImageLinks(link);
-		}
-		for(String link:videoLinksList) {
-			validateImageLinks(link);
-		}
-		validatePdfLink(pdfLink);
+//		for(String link:imageLinksList) {
+//			System.out.println(link);
+//			validateImageLinks(link);
+//		}
+//		for(String link:videoLinksList) {
+//			validateImageLinks(link);
+//		}
+//		validatePdfLink(pdfLink);
 
 		log.info("Product Details Validated");
 	}

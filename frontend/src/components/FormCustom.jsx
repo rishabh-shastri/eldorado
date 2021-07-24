@@ -1,52 +1,29 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import { Form, Container, Button } from 'react-bootstrap';
 import TextField from './TextField';
 import Creatable from 'react-select/creatable';
 import { addProduct } from './product';
-import { useTranslation } from 'react-i18next';
-import cookies from 'js-cookie';
 
-const languages = [
-    {
-      code: 'fr',
-      name: 'Français',
-      country_code: 'fr',
-    },
-    {
-      code: 'en',
-      name: 'English',
-      country_code: 'gb',
-    },
-];
 
 function FormCustom(props) {
 
-    const currentLanguageCode = cookies.get('i18next') || 'en'
-    const currentLanguage = languages.find((l) => l.code === currentLanguageCode)
-    
-    const { t } = useTranslation()
     const categories = [
-        {label:t('appliances'),value:1},
-        {label:t('books'),value:2},
-        {label:t('clothes'),value:3},
-        {label:t('miscellaneous'),value:4}
+        {label:"Appliances",value:1},
+        {label:"Books",value:2},
+        {label:"Clothes",value:3},
+        {label:"Miscellaneous",value:4}
     ];
-  
-    useEffect(() => {
-      document.body.dir = currentLanguage.dir || 'ltr'
-      document.title = t('app_title')
-    }, [currentLanguage, t]);
 
     const [data, setData] = useState({ name: "", desc: "", category: "", price: "", quantity: "", imageLinks: "", videoLinks: "", pdfLink: "" });
     const [errors, setErrors] = useState({});
     const [categoryValue,setCategoryValue]=useState('');
+    //const [isValid, setIsValid]=useState(false);
     function changeHandler(ce, value) {
         setData({ ...data, [ce.target.id]: value });
     }
-
-    var isValid = false;
-
-    function send(e) {
+    var isValid=false;
+    
+    function addHandler(e) {
         isValid = true;
         setErrors(validate());
         if (!isValid) {
@@ -103,35 +80,45 @@ function FormCustom(props) {
                 newErrors.quantity = "Please enter only digits";
             }
         }
-
+        if(!imageLinks)
         var imageLinksArray = imageLinks.split(',');
         imageLinksArray = imageLinksArray.map(link => link.trim());
 
         if (!newErrors.imageLinks) {
-            isValid = imageLinksArray.map(link => validateLinks(link)).reduce((acc, val) => acc || val) ? false : isValid;
-            newErrors.imageLinks = imageLinksArray.map(link => validateLinks(link)).reduce((acc, val) => acc || val) ? "Invalid Image Link" : "";
+            isValid = imageLinksArray.map(link => validateImageLinks(link)).reduce((acc, val) => acc || val) ? false : isValid;
+            newErrors.imageLinks = imageLinksArray.map(link => validateImageLinks(link)).reduce((acc, val) => acc || val) ? "Invalid Image Link" : "";
         }
 
-        var videoLinksArray = videoLinks.split(',');
-        videoLinksArray = videoLinksArray.map(link => link.trim());
+        // var videoLinksArray = videoLinks.split(',');
+        // videoLinksArray = videoLinksArray.map(link => link.trim());
 
-        if (videoLinks) {
-            isValid= videoLinksArray.map(link => validateLinks(link)).reduce((acc, val) => acc || val) ? false : isValid;
-            newErrors.videoLinks = videoLinksArray.map(link => validateLinks(link)).reduce((acc, val) => acc || val) ? "Invalid Video Link" : "";
-        }
+        // if (videoLinks) {
+        //     isValid= videoLinksArray.map(link => validateLinks(link)).reduce((acc, val) => acc || val) ? false : isValid;
+        //     newErrors.videoLinks = videoLinksArray.map(link => validateVideoLinks(link)).reduce((acc, val) => acc || val) ? "Invalid Video Link" : "";
+        // }
 
-        validateLinks(pdfLink);
+        // validateLinks(pdfLink);
 
 
-        function validateLinks(link) {
-            var pat = new RegExp(/^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/
-            );
+        function validateImageLinks(link) {
+            var pat = new RegExp(/(https?:\/\/.*\.(?:png|jpg))/i);
             if (!pat.test(link)) {
                 isValid = false;
                 return true;
             }
             return false;
         }
+
+        // return newErrors;
+
+        // function validateVideoLinks(link) {
+        //     var pat = new RegExp(/http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/i);
+        //     if (!pat.test(link)) {
+        //         isValid = false;
+        //         return true;
+        //     }
+        //     return false;
+        // }
 
         return newErrors;
 
@@ -150,18 +137,18 @@ function FormCustom(props) {
                     <div>
                         <TextField
                             id="name"
-                            name={t('name')}
-                            placeholder={t('enter_name')}
+                            name="Product Name"
+                            placeholder="Enter Product Name"
                             input={changeHandler}
                             isInvalid={!!errors.name}
                             error={errors.name}
                         />
                         <Form.Group className="mb-3 required">
-                            <Form.Label className="control-label">{t('description')}</Form.Label>
+                            <Form.Label className="control-label">Product Description</Form.Label>
                             <Form.Control
                                 id="desc"
                                 as="textarea"
-                                placeholder={t('enter_description')}
+                                placeholder="Enter Product Description"
                                 style={{ height: '100px' }}
                                 onChange={(e) => changeHandler(e, e.target.value)}
                                 isInvalid={!!errors.desc}
@@ -170,7 +157,7 @@ function FormCustom(props) {
                         </Form.Group>
 
                         <Form.Group className="mb-3 required">
-                            <Form.Label className="control-label">{t('category')}</Form.Label>
+                            <Form.Label className="control-label">Category</Form.Label>
                                 <Creatable
                                     id="category"
                                     isClearable
@@ -187,8 +174,8 @@ function FormCustom(props) {
 
                         <TextField
                             id="price"
-                            name={t('price')}
-                            placeholder={t('enter_price')}
+                            name="Price"
+                            placeholder="Enter Price"
                             input={changeHandler}
                             isInvalid={!!errors.price}
                             error={errors.price}
@@ -196,8 +183,8 @@ function FormCustom(props) {
 
                         <TextField
                             id="quantity"
-                            name={t('quantity')}
-                            placeholder={t('enter_quantity')}
+                            name="Quantity"
+                            placeholder="Enter the Quantity"
                             input={changeHandler}
                             isInvalid={!!errors.quantity}
                             error={errors.quantity}
@@ -205,8 +192,8 @@ function FormCustom(props) {
 
                         <TextField
                             id="imageLinks"
-                            name={t('image')}
-                            placeholder={t('enter_image')}
+                            name="ImageLinks(Use comma for multiple Link)"
+                            placeholder="Enter Image Links"
                             input={changeHandler}
                             isInvalid={!!errors.imageLinks}
                             error={errors.imageLinks}
@@ -214,22 +201,22 @@ function FormCustom(props) {
 
                         <TextField
                             id="videoLinks"
-                            name={t('video')}
-                            placeholder={t('enter_video')}
+                            name="VideoLinks(Use comma for multiple Link)"
+                            placeholder="Enter Video Links"
                             input={changeHandler}
                             isInvalid={!!errors.videoLinks}
                             error={errors.videoLinks}
                         />
                         <TextField
-                            name={t('pdf')}
-                            placeholder={t('enter_pdf')}
+                            name="PDF Link"
+                            placeholder="Enter PDF Link"
                             id="pdfLink"
                             input={changeHandler}
                             isInvalid={!!errors.pdfLink}
                             error={errors.pdfLink}
                         />
-                        <Button variant="dark" type="submit" onClick={send}>
-                        {t('add')}
+                        <Button variant="dark" type="submit" onClick={addHandler}>
+                        Add Product
                         </Button>
                     </div>
                 </Container>
