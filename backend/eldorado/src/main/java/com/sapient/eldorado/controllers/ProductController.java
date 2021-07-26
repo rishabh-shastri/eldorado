@@ -16,10 +16,11 @@ import com.sapient.eldorado.services.ProductService;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ProductController {
-	
+
 	@Autowired
 	ProductService productService;
-	
+
+	// log4j Logger object for logging in ProductController Class
 	static Logger log = Logger.getLogger(ProductController.class.getName());
 
 	@GetMapping("/")
@@ -28,15 +29,18 @@ public class ProductController {
 		return "Hello";
 	}
 
+	//addProduct function called when we hit given end point
 	@PostMapping("/admin/product")
 	public void addProduct(@RequestBody Product product) {
 		try {
-			productService.addProductService(product);
+			productService.addProductService(product); // Adding Product using Product Service
 			if (product != null)
 				log.info("Product Added Successfully");
 			else
 				log.info("Product Details Not Recieved");
-		} catch (EmptyFieldException e) {
+		}
+		// Catching and Logging Custom Exceptions
+		catch (EmptyFieldException e) {
 			log.error(e.getMessage(), e);
 		} catch (InvalidEntryException e) {
 			log.error(e.getMessage(), e);
