@@ -4,25 +4,21 @@ import TextField from './TextField';
 import Creatable from 'react-select/creatable';
 import { addProduct } from './product';
 
-
+const categories = [
+    { label: "Appliances", value: 1 },
+    { label: "Books", value: 2 },
+    { label: "Clothes", value: 3 },
+    { label: "Miscellaneous", value: 4 }
+];
 function FormCustom(props) {
-
-    const categories = [
-        {label:"Appliances",value:1},
-        {label:"Books",value:2},
-        {label:"Clothes",value:3},
-        {label:"Miscellaneous",value:4}
-    ];
 
     const [data, setData] = useState({ name: "", desc: "", category: "", price: "", quantity: "", imageLinks: "", videoLinks: "", pdfLink: "" });
     const [errors, setErrors] = useState({});
-    const [categoryValue,setCategoryValue]=useState('');
-    //const [isValid, setIsValid]=useState(false);
-    function changeHandler(ce, value) {
+    const [categoryValue, setCategoryValue] = useState('');
+    function changeHandler(ce,value) {
         setData({ ...data, [ce.target.id]: value });
     }
-    var isValid=false;
-    
+    var isValid = false;
     function addHandler(e) {
         isValid = true;
         setErrors(validate());
@@ -80,53 +76,50 @@ function FormCustom(props) {
                 newErrors.quantity = "Please enter only digits";
             }
         }
-        if(!imageLinks)
-        var imageLinksArray = imageLinks.split(',');
-        imageLinksArray = imageLinksArray.map(link => link.trim());
-
         if (!newErrors.imageLinks) {
-            isValid = imageLinksArray.map(link => validateImageLinks(link)).reduce((acc, val) => acc || val) ? false : isValid;
-            newErrors.imageLinks = imageLinksArray.map(link => validateImageLinks(link)).reduce((acc, val) => acc || val) ? "Invalid Image Link" : "";
+            var imageLinksArray = imageLinks.split(',');
+            imageLinksArray = imageLinksArray.map(link => link.trim());
+            imageLinksArray.forEach(link => validateImageLinks(link));
         }
-
-        // var videoLinksArray = videoLinks.split(',');
-        // videoLinksArray = videoLinksArray.map(link => link.trim());
-
-        // if (videoLinks) {
-        //     isValid= videoLinksArray.map(link => validateLinks(link)).reduce((acc, val) => acc || val) ? false : isValid;
-        //     newErrors.videoLinks = videoLinksArray.map(link => validateVideoLinks(link)).reduce((acc, val) => acc || val) ? "Invalid Video Link" : "";
-        // }
-
-        // validateLinks(pdfLink);
-
 
         function validateImageLinks(link) {
-            var pat = new RegExp(/(https?:\/\/.*\.(?:png|jpg))/i);
+            var pat = new RegExp(/(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/i);
             if (!pat.test(link)) {
                 isValid = false;
-                return true;
+                newErrors.imageLinks = "Invalid Image Link";
             }
-            return false;
         }
 
-        // return newErrors;
+        if (videoLinks){
+            var videoLinksArray = videoLinks.split(',');
+            videoLinksArray = videoLinksArray.map(link => link.trim());
+            videoLinksArray.forEach(link => validateVideoLinks(link));
+        }
+            
 
-        // function validateVideoLinks(link) {
-        //     var pat = new RegExp(/http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/i);
-        //     if (!pat.test(link)) {
-        //         isValid = false;
-        //         return true;
-        //     }
-        //     return false;
-        // }
+        function validateVideoLinks(link) {
+            pat = new RegExp(/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w-]+\?v=|embed\/|v\/)?)([\w-]+)(\S+)?$/i);
+            if (!pat.test(link)) {
+                isValid = false;
+                newErrors.videoLinks = "Invalid Video Link";
+            }
+        }
+
+        if (pdfLink) {
+            pat = new RegExp(/(http(s?):)([/|.|\w|\s|-])*\.(?:pdf)/i);
+            if (!pat.test(pdfLink)) {
+                isValid = false;
+                newErrors.pdfLink = "Invalid PDF Link";
+            }
+        }
 
         return newErrors;
 
     }
 
-    function handleChange(value){
+    function handleChange(value) {
         setCategoryValue(value);
-        if(value)
+        if (value)
             setData({ ...data, 'category': value.label });
     }
 
@@ -150,7 +143,7 @@ function FormCustom(props) {
                                 as="textarea"
                                 placeholder="Enter Product Description"
                                 style={{ height: '100px' }}
-                                onChange={(e) => changeHandler(e, e.target.value)}
+                                onChange={(e) => changeHandler(e,e.target.value)}
                                 isInvalid={!!errors.desc}
                             />
                             <Form.Control.Feedback type='invalid'>{errors.desc}</Form.Control.Feedback>
@@ -158,18 +151,18 @@ function FormCustom(props) {
 
                         <Form.Group className="mb-3 required">
                             <Form.Label className="control-label">Category</Form.Label>
-                                <Creatable
-                                    id="category"
-                                    isClearable
-                                    onChange={(value)=>handleChange(value)}
-                                    options={categories}
-                                    value={categoryValue}
-                                    
-                                />
-                                <Form.Control className ='zeroheight'
-                                    isInvalid={!!errors.category}
-                                />
-                                <Form.Control.Feedback type='invalid'>{errors.category}</Form.Control.Feedback>
+                            <Creatable
+                                id="category"
+                                isClearable
+                                onChange={(value) => handleChange(value)}
+                                options={categories}
+                                value={categoryValue}
+
+                            />
+                            <Form.Control className='zeroheight'
+                                isInvalid={!!errors.category}
+                            />
+                            <Form.Control.Feedback type='invalid'>{errors.category}</Form.Control.Feedback>
                         </Form.Group>
 
                         <TextField
@@ -192,8 +185,8 @@ function FormCustom(props) {
 
                         <TextField
                             id="imageLinks"
-                            name="ImageLinks(Use comma for multiple Link)"
-                            placeholder="Enter Image Links"
+                            name="Image Links"
+                            placeholder="Enter Image Links (Use comma for multiple Links)"
                             input={changeHandler}
                             isInvalid={!!errors.imageLinks}
                             error={errors.imageLinks}
@@ -201,8 +194,8 @@ function FormCustom(props) {
 
                         <TextField
                             id="videoLinks"
-                            name="VideoLinks(Use comma for multiple Link)"
-                            placeholder="Enter Video Links"
+                            name="Video Links"
+                            placeholder="Enter Youtube Video Links  (Use comma for multiple Links)"
                             input={changeHandler}
                             isInvalid={!!errors.videoLinks}
                             error={errors.videoLinks}
@@ -216,7 +209,7 @@ function FormCustom(props) {
                             error={errors.pdfLink}
                         />
                         <Button variant="dark" type="submit" onClick={addHandler}>
-                        Add Product
+                            Add Product
                         </Button>
                     </div>
                 </Container>

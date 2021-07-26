@@ -1,24 +1,17 @@
-package com.sapient.eldorado;
+package com.sapient.eldorado.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+
 import com.sapient.eldorado.entities.Product;
 import com.sapient.eldorado.exceptions.EmptyFieldException;
 import com.sapient.eldorado.exceptions.InvalidEntryException;
-import com.sapient.eldorado.services.ProductService;
-import com.sapient.eldorado.services.ProductServiceImpl;
 
-
-@SpringBootTest
-class EldoradoApplicationTests {
-
+class ProductServiceImplTest {
 
 	ProductServiceImpl productService=new ProductServiceImpl();
 	
@@ -31,8 +24,8 @@ class EldoradoApplicationTests {
 		videoLinksList.add("http://www.example.com/ %26here.html");
 
 		Product product=new Product("add87@","","Accessories",-1,-1,imageLinksList,videoLinksList,"http://www.example.com/ %26here.html");
-		Exception exception = assertThrows(InvalidEntryException.class,()->productService.validateProductDetails(product));
-		String expectedMessage = "Name Field Pattern";
+		Exception exception = assertThrows(EmptyFieldException.class,()->productService.validateProductDetails(product));
+		String expectedMessage = "Desc Field";
 		String actualMessage = exception.getMessage();
 		assertTrue(actualMessage.contains(expectedMessage));
 	}
@@ -46,24 +39,7 @@ class EldoradoApplicationTests {
 		assertTrue(actualMessage.contains(expectedMessage));
 	}
 	
-	@Test
-	public void validProductNameLengthTest() {
-		String name = "efniurgnitunwdifoegrnbiunfoingsidmoinsvoifdmbodjosimgbidnmgoindgfiovs ibfondoinboinoinafsfssgrfsonsfnoinsonsonsvonivfonfvn";
-	Exception exception = assertThrows(InvalidEntryException.class,()->productService.validateName(name));
-		String expectedMessage = "Name Field Length Exceeded";
-		String actualMessage = exception.getMessage();
-		assertTrue(actualMessage.contains(expectedMessage));
-	}
-
-	@Test
-	public void validNameCharacterSetTest() {
-		String name = "48fsek@";
-		Exception exception = assertThrows(InvalidEntryException.class,()->productService.validateName(name));
-		String expectedMessage = "Name Field Pattern";
-		String actualMessage = exception.getMessage();
-		assertTrue(actualMessage.contains(expectedMessage));
-	}
-	
+		
 	@Test
 	public void validProductDescription(){
 		String desc = "";
@@ -118,8 +94,8 @@ class EldoradoApplicationTests {
 	
 	@Test
 	public void validProductCategory() {
-		String category="Accessories";
-		Exception exception = assertThrows(InvalidEntryException.class,()->productService.validateCategory(category));
+		String category="";
+		Exception exception = assertThrows(EmptyFieldException.class,()->productService.validateCategory(category));
 		String expectedMessage = "Product Category ";
 		String actualMessage = exception.getMessage();
 		assertTrue(actualMessage.contains(expectedMessage));

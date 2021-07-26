@@ -5,9 +5,8 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.sapient.eldorado.controllers.ProductController;
 import com.sapient.eldorado.entities.Product;
+import com.sapient.eldorado.enums.Regex;
 import com.sapient.eldorado.exceptions.EmptyFieldException;
 import com.sapient.eldorado.exceptions.InvalidEntryException;
 import com.sapient.eldorado.repositories.ProductRepository;
@@ -21,8 +20,6 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void addProductService(Product product) throws EmptyFieldException, InvalidEntryException {
 		validateProductDetails(product); // Validating Product Details Received
-
-		//System.out.println(product);
 		productRepository
 				.save(new Product(product.getName(), product.getDesc(), product.getCategory(), product.getPrice(),
 						product.getQuantity(), product.getImageLinksList(), product.getVideoLinksList(), product.getPdfLink()));
@@ -42,14 +39,14 @@ public class ProductServiceImpl implements ProductService {
 		validateDesc(desc);
 		validateCategory(category);
 		validateQuantity(quantity);
-//		for(String link:imageLinksList) {
-//			System.out.println(link);
-//			validateImageLinks(link);
-//		}
-//		for(String link:videoLinksList) {
-//			validateImageLinks(link);
-//		}
-//		validatePdfLink(pdfLink);
+		validatePrice(price);
+		for(String link:imageLinksList) {
+			validateImageLinks(link);
+		}
+		for(String link:videoLinksList) {
+			validateVideoLinks(link);
+		}
+		validatePdfLink(pdfLink);
 
 		log.info("Product Details Validated");
 	}
@@ -80,21 +77,24 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	public void validateImageLinks(String imageLinks) throws InvalidEntryException {
-		String regeximage = "^((ftp|http|https):\\/\\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\\.[a-zA-Z]+)+((\\/)[\\w#]+)*(\\/\\w+\\?[a-zA-Z0-9_]+=\\w+(&[a-zA-Z0-9_]+=\\w+)*)?$";
-		if (!Pattern.matches(regeximage, imageLinks))
+		if (!Pattern.matches(Regex.IMAGEREGEX.getValue(), imageLinks)) {
 			throw new InvalidEntryException("Image Links ");
+		}
+			
 	}
 
 	public void validateVideoLinks(String videoLinks) throws InvalidEntryException {
-		String regexvideo = "^((ftp|http|https):\\/\\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\\.[a-zA-Z]+)+((\\/)[\\w#]+)*(\\/\\w+\\?[a-zA-Z0-9_]+=\\w+(&[a-zA-Z0-9_]+=\\w+)*)?$";
-		if (!Pattern.matches(regexvideo, videoLinks))
+		
+		
+		if (!Pattern.matches(Regex.VIDEOREGEX.getValue(), videoLinks))
 			throw new InvalidEntryException("Video Links ");
 	}
 
 	public void validatePdfLink(String pdfLinks) throws InvalidEntryException {
-		String regexpdf = "^((ftp|http|https):\\/\\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\\.[a-zA-Z]+)+((\\/)[\\w#]+)*(\\/\\w+\\?[a-zA-Z0-9_]+=\\w+(&[a-zA-Z0-9_]+=\\w+)*)?$";
-		if (!Pattern.matches(regexpdf, pdfLinks))
+		if (!Pattern.matches(Regex.PDFREGEX.getValue(), pdfLinks)) {
 			throw new InvalidEntryException("Pdf Links ");
+		}
+			
 	}
 
 }
