@@ -37,6 +37,78 @@ public class Product implements Serializable{
 		this.videoLinksList = videoLinksList;
 		this.pdfLink = pdfLink;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getPdfLink() {
+		return pdfLink;
+	}
+
+	public void setPdfLink(String pdfLink) {
+		this.pdfLink = pdfLink;
+	}
+
+	public List<String> getImageLinksList() {
+		return imageLinksList;
+	}
+
+	public void setImageLinksList(List<String> imageLinksList) {
+		this.imageLinksList = imageLinksList;
+	}
+
+	public List<String> getVideoLinksList() {
+		return videoLinksList;
+	}
+
+	public void setVideoLinksList(List<String> videoLinksList) {
+		this.videoLinksList = videoLinksList;
+	}
 	
 
 }
